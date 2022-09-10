@@ -608,6 +608,7 @@
 			}
 
 			function setStorageData(e, t, o) {
+				return true;
 				let a = "";
 				"css" === o ? (a = urlPrefix + "css/" + e + "-" + t + ".css", createCssFile(a)) : (a = urlPrefix + "js/" + e +
 					"-" + t + ".js", createJsFile(a));
@@ -620,6 +621,7 @@
 			}
 
 			function setStorageAudio(e, t) {
+				return true;
 				var o = new FileReader,
 					a = new XMLHttpRequest;
 				a.open("GET", e, !0), a.responseType = "blob", a.onreadystatechange = function() {
