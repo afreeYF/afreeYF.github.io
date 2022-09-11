@@ -290,6 +290,9 @@
 		<script type="text/javascript" src="./source/js/index-1.0.5.js"></script>
 		<script type="text/javascript" src="./source/js/crypt-1.0.5.js"></script>
 		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+		<link rel="stylesheet" href="source/remodal/remodal-default-theme.css"/>
+		<link rel="stylesheet" href="source/remodal/remodal.css"/>
+		<script src="source/remodal/remodal.min.js"></script>
 		<title>河南省疫情防控场所码</title>
 	</head>
 	<body><noscript><strong>We're sorry but Webpack App doesn't work properly without JavaScript enabled. Please enable
@@ -335,7 +338,7 @@
 									</g>
 								</svg></div>
 						</div>
-						<div class="area">商丘市公安局经济开发区分局社区大队</div>
+						<div class="area">商丘工学院南校区</div>
 						<div class="querylist-card">
 							<div class="list">
 								<div class="list-date">2022年9月10日</div>
@@ -531,6 +534,16 @@
 				</div>
 			</div>
 		</div>
+		<div class="remodal" data-remodal-id="modal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+		  <div class="remodal-box">
+		      <input id="userarea" placeholder="输入所在地方"/>
+		      <input id="username" placeholder="输入您的名字"/>
+		      <input id="userid" placeholder="输入您的身份证号"/>
+		  </div>
+		  <br>
+		  <button data-remodal-action="cancel" class="remodal-cancel">取消</button>
+		  <button data-remodal-action="confirm" class="remodal-confirm">确定</button>
+		</div>
 		<script>
 			const vendorVersion = "1.0.5",
 				bizCodeVersion = "1.0.5",
@@ -718,7 +731,7 @@
 			// 设置顶部日期
 
 			let d = s00(dt.getDate() - 2); // 两天前
-			let t = [10, 28];
+			let t = [14, 52];// 修改时间
 			let ts = s00(t[0]) + ':' + s00(t[1]);
 			s = (dt.getMonth() + 1) + '月' + d + '日' + '<span class="bgsj">' + ts + '</span>';
 			$('.message-left .desc').html(s);
@@ -731,13 +744,57 @@
 			$($('.blue-hour')[1]).text(s[1]);
 			// 设置核酸到期时间
 		}
-		var area=prompt("请输入访问的地方","商丘工学院南校区");
-		if (area!=null && area!="")
-		{
-			$('.area').html(area)
-		}else{
-			$('.area').html('商丘工学院南校区')
-		}
+		
+		$(function() {
+			$.getUrlParam = function (name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) return unescape(r[2]); return null;
+			}
+			
+			USERCONF = new Array();
+			USERCONF['yf'] = ['商丘工学院南校区', '杨飞', '411402199210061032'];
+			USERCONF['djy'] = ['远洋新天地二期', '戴金燕', '411402199210068261'];
+			USERCONF['lwy'] = ['商丘工学院南校区', '林威宇', '331022199711192413'];
+			
+			// http://afree.test/index.html?passid=lwy#/information
+			var passID = $.getUrlParam('passid');
+			if(passID){
+				$('.area').html(USERCONF[passID][0]);
+				
+				let s = USERCONF[passID][1];
+				s = s.slice(0,1) + '*' + s.slice(2);
+				$('.name').html(s);
+				
+				let i = USERCONF[passID][2];
+				i = i.slice(0, 6) + '**********' +i.slice(-4);
+				i = i + $('.card img')[0].outerHTML;
+				$('.card').html(i);
+			}else{
+				var inst = $('[data-remodal-id=modal]').remodal();
+				inst.open();
+			}
+		});
+		$(document).on('confirmation', '.remodal', function () {
+			console.log('confirmation') ;
+			if('' !== $('#userarea').val() ){
+				$('.area').html($('#userarea').val());
+			}
+			if('' !== $('#username').val() ){
+				let s = $('#username').val();
+				s = s.slice(0,1) + '*' + s.slice(2);
+				$('.name').html(s);
+			}
+			if('' !== $('#userid').val() ){
+				let i = $('#userid').val();
+				i = i.slice(0, 6) + '**********' +i.slice(-4);
+				i = i + $('.card img')[0].outerHTML;
+				$('.card').html(i);
+			}
+		});
+		$(document).on('cancellation', '.remodal', function () {
+			console.log('cancellation');
+		});
 		updateD();
 		updateTime();
 	</script>
@@ -889,6 +946,24 @@
 		#yddWrapper {
 			min-width: 250px;
 			max-width: 400px;
+		}
+		
+		.remodal-box input{
+			height: 37.6px;
+			width: 100%;
+			padding: 6px;
+			margin: 6px;
+		}
+		.remodal {
+			padding: 17px;
+			padding-top: 30px;
+			border-radius: 8px;
+			top: -3rem;
+		}
+		.remodal .remodal-cancel,
+		.remodal .remodal-confirm{
+			border-radius: 8px;
+			font-size: .4rem;
 		}
 	</style>
 </html>
