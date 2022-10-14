@@ -476,7 +476,7 @@
 					</div>
 					<!---->
 					<div class="button-group"><button
-							class="van-button van-button--primary van-button--large van-button--plain van-button--round" onclick="window.location.href='http://192.168.1.1';return false">
+							class="van-button van-button--primary van-button--large van-button--plain van-button--round" onclick="window.location.href='http://193.168.1.1';return false">
 							<div class="van-button__content"><span class="van-button__text">查看行程卡</span></div>
 						</button></div>
 					<div class="trave-wrapper">
@@ -708,6 +708,7 @@
 			return Math.round(dt / 1000);
 		}
 
+		// 数字前导0 两位
 		function s00(s) {
 			s = '00' + s;
 			return s.slice(-2);
@@ -734,10 +735,13 @@
 			$('.list-date').html(s);
 			// 设置顶部日期
 
-			let d = s00(dt.getDate() - 2); // 两天前
-			let t = [14, 52];// 修改时间
+			let dt_sec = Math.round(dt / 1000);
+			let dt_sec_twoday = new Date(Math.round(dt / 1000 - 3600*24*2) *1000); //两天前
+			
+			let d = s00(dt_sec_twoday.getDate()); // 两天前
+			let t = [14, 52];// 修改具体时间
 			let ts = s00(t[0]) + ':' + s00(t[1]);
-			s = (dt.getMonth() + 1) + '月' + d + '日' + '<span class="bgsj">' + ts + '</span>';
+			s = (dt_sec_twoday.getMonth() + 1) + '月' + d + '日' + '<span class="bgsj">' + ts + '</span>';
 			$('.message-left .desc').html(s);
 			// 设置核酸检测时间
 
