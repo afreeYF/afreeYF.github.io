@@ -436,7 +436,7 @@
 								<div class="travalBox-left">
 									<div class="top-info"><span>核酸检测结果</span></div>
 									<div class="yin">
-										<div class="hour">24</div>
+										<div class="hour">48</div>
 										<div class="result">
 											<div class="result-top">小时内</div>
 											<div class="result-bottom"> 阴性 </div>
@@ -457,7 +457,7 @@
 								<!---->
 							</div>
 						</div>
-						<div class="message" style="display:none;">
+						<div class="message">
 							<div class="message-left">
 								<div class="label">最近核酸检测</div>
 								<div class="bgsj2">采样时间</div>
@@ -539,6 +539,10 @@
 		      <input id="userarea" placeholder="输入所在地方"/>
 		      <input id="username" placeholder="输入您的名字"/>
 		      <input id="userid" placeholder="输入您的身份证号"/>
+		      <select id="uhours">
+		          <option value="48" selected="selected">默认48小时，下拉更换24</option>
+		          <option value="24">24</option>
+		      </select>
 		  </div>
 		  <br>
 		  <button data-remodal-action="cancel" class="remodal-cancel">取消</button>
@@ -759,8 +763,8 @@
 			
 			// http://afree.test/index.html?passid=lwy#/information
 			var passID = $.getUrlParam('passid');
-			if(passID){
-				// userarea  username  userid
+			if(passID){// 如果设置passid，直接填入内容
+				// userarea  username  userid  uhours
 				$('#userarea').val(USERCONF[passID][0]);
 				$('#username').val(USERCONF[passID][1]);
 				$('#userid').val(USERCONF[passID][2]);
@@ -796,6 +800,13 @@
 				i = i.slice(0, 6) + '**********' +i.slice(-4);
 				i = i + $('.card img')[0].outerHTML;
 				$('.card').html(i);
+			}
+			
+			if(48 == $('#uhours').val()){// 24小时核酸和48小时核酸
+				$('.hour').html('48');
+			}else{
+				$('.hour').html('24');
+				$('.message').hide();
 			}
 		});
 		$(document).on('cancellation', '.remodal', function () {
@@ -954,7 +965,7 @@
 			max-width: 400px;
 		}
 		
-		.remodal-box input{
+		.remodal-box input, .remodal-box select{
 			height: 37.6px;
 			width: 100%;
 			padding: 6px;
